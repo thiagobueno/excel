@@ -23,7 +23,7 @@ date_default_timezone_set('PRC');
 $data = Excel::readExcelFile('./1.xlsx', ['id' => 'ID', 'name' => 'NAME', 'date' => 'DATE']);
 
 //Processing date
-array_walk($data, function (&$item) {
+array_walk($data, function ($item) {
     $item['date'] = Excel::convertTime($item['date'], 'Y-m-d');
 });
 
