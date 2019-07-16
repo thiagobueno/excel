@@ -1,54 +1,54 @@
-# Excel 处理
+# PHP Excel
 
-## 安装
+## Install
 
 ```
 composer require pfinal/excel
 ```
 
-##  使用示例
+##  Examples
 
 
-### 导入Excel
+### Import Excel
 
 ```
 <?php
 
-include 'vendor/autoload.php'; // 如果在框架中通常不需要
+include 'vendor/autoload.php'; // If you don't usually need it in the framework
 
 use PFinal\Excel\Excel;
 
 date_default_timezone_set('PRC');
 
-$data = Excel::readExcelFile('./1.xlsx', ['id' => '编号', 'name' => '姓名', 'date' => '日期']);
+$data = Excel::readExcelFile('./1.xlsx', ['id' => 'ID', 'name' => 'NAME', 'date' => 'DATE']);
 
-//处理日期
+//Processing date
 array_walk($data, function (&$item) {
     $item['date'] = Excel::convertTime($item['date'], 'Y-m-d');
 });
 
 var_dump($data);
 
-//如果数据量大，建议用csv格式
-$data = Excel::readExcelFile('./1.csv', ['id' => '编号', 'name' => '姓名', 'date' => '日期'], 1, 1, '', 'GBK');
+//If the amount of data is large, it is recommended to use the csv format.
+$data = Excel::readExcelFile('./1.csv', ['id' => 'ID', 'name' => 'NAME', 'date' => 'DATE'], 1, 1, '', 'GBK');
 
 ```
 
-Excel中的数据:
+Data in Excel:
 
 ![](doc/1.png)
 
-得到结果如下:
+Results:
 
 ```
 $data = [
-    ['id'=>1,'name'=>'张三', 'date'=>'2017-07-18'],
-    ['id'=>1,'name'=>'李四', 'date'=>'2017-07-19'],
-    ['id'=>1,'name'=>'王五', 'date'=>'2017-07-20'],
+    ['id'=>1,'name'=>'Jack', 'date'=>'2017-07-18'],
+    ['id'=>1,'name'=>'Mary', 'date'=>'2017-07-19'],
+    ['id'=>1,'name'=>'Ethan', 'date'=>'2017-07-20'],
 ];
 ```
 
-### 导出到Excel文件
+### Export Excel
 
 ```
 $data = [
@@ -59,22 +59,22 @@ $data = [
 
 $map = [
   'title'=>[
-        'id' => '编号',
-        'name' => '姓名',
-        'age' => '年龄',
+        'id' => 'ID',
+        'name' => 'NAME',
+        'age' => 'AGE',
     ],
 ];
 
 $file = 'user' . date('Y-m-d');
 
-//浏览器直接下载
-Excel::exportExcel($data, $map, $file, '用户信息');
+//Browser download
+Excel::exportExcel($data, $map, $file, 'User Info');
 
-//保存到磁盘文件中
-//Excel::toExcelFile($data, $map, $file, '用户信息');
+//Save file
+//Excel::toExcelFile($data, $map, $file, 'User Info');
 
 
-//分块导出到CSV文件
+//Exporting to a CSV file
 Excel::chunkExportCSV($map, './temp.csv', function ($writer) {
 
      DB::select('user')->orderBy('id')->chunk(100, function ($users) use ($writer) {
